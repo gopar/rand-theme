@@ -1,12 +1,12 @@
 ;;; rand-theme.el --- Random Emacs theme at start-up!
 ;;
 ;; Filename: rand-theme.el
-;; Description:
+;; Description: Get a random theme
 ;; Author: Daniel Gopar
 ;; Maintainer: Daniel Gopar
 ;; Created: Tue Oct 20 22:21:57 2015 (-0700)
 ;; Version: 0.1
-;; Package-Requires: ()
+;; Package-Requires: ((cl "2.02"))
 ;; URL: https://github.com/gopar/rand-theme
 ;; Keywords:
 ;; Compatibility:
@@ -14,8 +14,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;;
-;;
+;; This package gives the ability to load a random theme. The random
+;; theme can be picked from a white list or you set a black list of
+;; themes you never want to choose (For example, the stock themes).
+;; The white list has higher precedence than the black list.
+;; It also provides functions to iterate forward and backwards
+;; through the defined themes.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
