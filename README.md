@@ -11,7 +11,7 @@ themes then this is for you! \o/
  You can setup a list that you only want to choose from or
  create a list of themes you *never* want to use.
 
-- You iterate through the themes you have, in case you don't
+- You can iterate forwards and backwards through the themes you have, in case you don't
 want it to be random.
 
 ## How to install
@@ -34,3 +34,9 @@ Example:
 (setq rand-theme-wanted '(abyss lush manoj-dark))
 (rand-theme)
 ```
+
+## Keybindings
+
+By default, there are no keybindings to this. 
+
+You can set them up yourself. My personal preference was setting `C-z` to run `rand-theme-iterate`.
