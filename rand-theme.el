@@ -49,6 +49,9 @@ If this is non-nil then it will have a higher precedence than `rand-theme-unwant
   :type 'sexp
   :group 'theme-list)
 
+(defvar rand-theme-previous-position nil
+  "Place holder for the position of the theme behind the current one.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helper functions
 (defun rand-theme--get-theme-list ()
@@ -64,9 +67,15 @@ If this is non-nil then it will have a higher precedence than `rand-theme-unwant
     ;; return themes to use
     available-themes))
 
+(defun rand-theme--load-theme (theme)
+  ""
+  ;; Disable ALL themes
+  (mapcar 'disable-theme custom-enabled-themes)
+  (load-theme theme t)
+  (message "Loaded Theme: %s" (symbol-name theme)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive functions
-
 (defun rand-theme ()
   "Randomly pick a theme from `rand-theme-unwanted' or if non-nil from `rand-theme-wanted'.
 Will raise error if both of these variables are nil."
@@ -75,9 +84,8 @@ Will raise error if both of these variables are nil."
         (theme nil))
     ;; Randomly choose a theme
     (setq theme (nth (random (length available-themes)) available-themes))
-    ;; Disable ALL themes
-    (mapcar 'disable-theme custom-enabled-themes)
-    (load-theme theme t)))
+    ;; Now load it
+    (rand-theme--load-theme theme)))
 
 (defun rand-theme-iterate ()
   "Iterate through the list of themes.
@@ -89,17 +97,37 @@ In case you want to go incremental."
         (curr-theme (nth 0 (mapcar 'symbol-name custom-enabled-themes))))
     ;; Get the next theme in line
     (setq curr-pos (1+ (cl-position (intern curr-theme) available-themes)))
+    (setq rand-theme-previous-position (1- curr-pos))
+    ;; Make sure the 1+ didn't go over the highest possible index
     (if (>= curr-pos (length available-themes))
         (setq curr-pos 0))
     (setq curr-theme (nth curr-pos available-themes))
-    ;; Disable ALL themes
-    (mapcar 'disable-theme custom-enabled-themes)
-    (load-theme curr-theme)
-    (message "Loaded Theme: %s" (symbol-name curr-theme))
-    ))
+    (rand-theme--load-theme curr-theme)))
+
+(defun rand-theme-iterate-backwards ()
+  "Iterate backwards through list of themes.
+In case you accidentally pass the theme you wanted."
+  (interactive)
+  (let ((available-themes (rand-theme--get-theme-list))
+        (curr-theme nil))
+    ;; If previous position is defined
+    (if rand-theme-previous-position
+        ;; Get the theme we should load
+        (setq curr-theme (nth rand-theme-previous-position available-themes))
+      ;; if previous is not defined then just get index of current theme
+      ;; and subtract one from it and go to that index
+      (setq rand-theme-previous-position
+            (1- (cl-position (car custom-enabled-themes) available-themes)))
+      ;; Get the theme we should load
+      (setq curr-theme (nth rand-theme-previous-position available-themes)))
+    ;; just update to the next previous-position value
+    (if (>= 0 rand-theme-previous-position)
+        (setq rand-theme-previous-position (1- (length available-themes)))
+      (setq rand-theme-previous-position (1- rand-theme-previous-position)))
+    ;; Load the theme
+    (rand-theme--load-theme curr-theme)))
 
 (provide 'rand-theme)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; rand-theme.el ends here
