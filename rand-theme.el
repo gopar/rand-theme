@@ -6,7 +6,7 @@
 ;; Maintainer: Daniel Gopar
 ;; Created: Tue Oct 20 22:21:57 2015 (-0700)
 ;; Version: 0.1
-;; Package-Requires: ((cl "2.02"))
+;; Package-Requires: ((cl-lib "0.5"))
 ;; URL: https://github.com/gopar/rand-theme
 ;; Keywords:
 ;; Compatibility:
@@ -40,7 +40,7 @@
 ;;
 ;;; Code:
 
-(require 'cl)
+(require 'cl-lib)
 
 (defcustom rand-theme-unwanted nil
   "List of themes that you *don't* want to randomly select."
