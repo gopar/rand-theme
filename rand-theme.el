@@ -80,6 +80,7 @@ If this is non-nil then it will have a higher precedence than `rand-theme-unwant
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Interactive functions
+;;;###autoload
 (defun rand-theme ()
   "Randomly pick a theme from `rand-theme-unwanted' or if non-nil from `rand-theme-wanted'.
 Will raise error if both of these variables are nil."
@@ -91,6 +92,7 @@ Will raise error if both of these variables are nil."
     ;; Now load it
     (rand-theme--load-theme theme)))
 
+;;;###autoload
 (defun rand-theme-iterate ()
   "Iterate through the list of themes.
 In case you want to go incremental."
@@ -108,6 +110,7 @@ In case you want to go incremental."
     (setq curr-theme (nth curr-pos available-themes))
     (rand-theme--load-theme curr-theme)))
 
+;;;###autoload
 (defun rand-theme-iterate-backwards ()
   "Iterate backwards through list of themes.
 In case you accidentally pass the theme you wanted."
