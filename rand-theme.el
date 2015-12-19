@@ -65,7 +65,7 @@ If this is non-nil then it will have a higher precedence than `rand-theme-unwant
   (let ((available-themes (custom-available-themes)) (theme nil))
     (if (null rand-theme-wanted)
         ;; Filter out unwanted themes
-        (mapc '(lambda (unwanted) (setq available-themes (remove unwanted available-themes))) rand-theme-unwanted)
+        (mapc (lambda (unwanted) (setq available-themes (remove unwanted available-themes))) rand-theme-unwanted)
       ;; No need to filter since we already have a list we want to use
       (setq available-themes rand-theme-wanted))
     ;; return themes to use
@@ -74,7 +74,7 @@ If this is non-nil then it will have a higher precedence than `rand-theme-unwant
 (defun rand-theme--load-theme (theme)
   ""
   ;; Disable ALL themes
-  (mapcar 'disable-theme custom-enabled-themes)
+  (mapc 'disable-theme custom-enabled-themes)
   (load-theme theme t)
   (message "Loaded Theme: %s" (symbol-name theme)))
 
